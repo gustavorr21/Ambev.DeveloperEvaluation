@@ -5,6 +5,6 @@ public class GetSaleProfile : Profile
 {
     public GetSaleProfile()
     {
-        CreateMap<Sales, GetSaleResponse>();
+        CreateMap<SalesEntity, GetSaleResponse>();
     }
 }

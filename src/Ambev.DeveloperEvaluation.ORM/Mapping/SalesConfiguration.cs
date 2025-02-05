@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Ambev.DeveloperEvaluation.ORM.Mapping
 {
-    public class SalesConfiguration : IEntityTypeConfiguration<Sales>
+    public class SalesConfiguration : IEntityTypeConfiguration<SalesEntity>
     {
-        public void Configure(EntityTypeBuilder<Sales> builder)
+        public void Configure(EntityTypeBuilder<SalesEntity> builder)
         {
             builder.ToTable("Sales");
 

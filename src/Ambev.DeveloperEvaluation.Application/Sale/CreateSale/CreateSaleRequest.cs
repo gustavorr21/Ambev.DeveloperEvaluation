@@ -1,4 +1,7 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSales
+﻿using System;
+using System.Collections.Generic;
+
+namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale
 {
     public class CreateSaleRequest
     {
@@ -7,14 +10,13 @@
         public string Client { get; set; }
         public decimal TotalValue { get; set; }
         public string Branch { get; set; }
-        public List<SaleItemRequest> Items { get; set; }
+        public List<CreateSaleItemRequest> Items { get; set; }
     }
 
-    public class SaleItemRequest
+    public class CreateSaleItemRequest
     {
         public string Product { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
     }
-
 }

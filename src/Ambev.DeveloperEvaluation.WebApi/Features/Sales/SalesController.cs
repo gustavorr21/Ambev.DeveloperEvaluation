@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSales;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Sale.CreateSale;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 
@@ -41,22 +41,31 @@ public class SalesController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateSale([FromBody] CreateSaleRequest request, CancellationToken cancellationToken)
     {
-        var validator = new CreateSaleRequestValidator();
+        var validator = new CreateSaleValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = "Validation failed"
+            });
 
+        // Mapeamento para o CreateSaleCommand
         var command = _mapper.Map<CreateSaleCommand>(request);
+
+        // Enviar comando via MediatR
         var response = await _mediator.Send(command, cancellationToken);
 
-        return Created(string.Empty, new ApiResponseWithData<CreateSaleResponse>
+        return Created(string.Empty, new ApiResponseWithData<CreateSaleResult>
         {
             Success = true,
             Message = "Sale created successfully",
-            Data = _mapper.Map<CreateSaleResponse>(response)
+            Data = _mapper.Map<CreateSaleResult>(response)
         });
     }
+
+
 
     /// <summary>
     /// Retrieves a sale by its ID

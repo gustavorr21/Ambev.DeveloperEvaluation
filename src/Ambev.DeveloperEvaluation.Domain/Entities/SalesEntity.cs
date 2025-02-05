@@ -1,6 +1,6 @@
 ﻿namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
-    public class Sales
+    public class SalesEntity
     {
         public Guid Id { get; set; }
         public string SaleNumber { get; set; }
@@ -10,6 +10,6 @@
         public string Branch { get; set; }
         public bool IsCancelled { get; set; }
 
-        public List<SaleItems> Items { get; set; }
+        public List<SaleItemsEntity> Items { get; set; }
     }
 }

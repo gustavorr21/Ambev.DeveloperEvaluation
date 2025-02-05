@@ -5,7 +5,7 @@ public class DeleteSaleProfile : Profile
 {
     public DeleteSaleProfile()
     {
-        CreateMap<int, Sales>()
+        CreateMap<int, SalesEntity>()
             .ForMember(dest => dest.IsCancelled, opt => opt.MapFrom(src => true));
     }
 }
