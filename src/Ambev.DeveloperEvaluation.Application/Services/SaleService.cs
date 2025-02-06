@@ -104,12 +104,20 @@ public class SaleService : ISaleService
         if (sale == null) throw new Exception("Venda não encontrada.");
 
         sale.IsCancelled = true;
+
+        foreach (var item in sale.Items)
+        {
+            item.IsCancelled = true;
+            await _mediator.Publish(new SaleItemCancelledEvent(item.Id), cancellationToken);
+        }
+
         await _saleRepository.UpdateAsync(sale, cancellationToken);
 
         await _mediator.Publish(new SaleCancelledEvent(saleId), cancellationToken);
 
-        _logger.LogInformation($"Venda {saleId} foi cancelada.");
+        _logger.LogInformation($"Venda {saleId} e seus itens foram cancelados.");
     }
+
 
     /// <summary>
     /// Cancela um item de venda
@@ -119,7 +127,9 @@ public class SaleService : ISaleService
         var saleItem = await _saleRepository.GetSaleItemByIdAsync(saleItemId, cancellationToken);
         if (saleItem == null) throw new Exception("Item de venda não encontrado.");
 
-        await _saleRepository.DeleteSaleItemAsync(saleItem, cancellationToken);
+        saleItem.IsCancelled = true;
+
+        await _saleRepository.UpdateSaleItemAsync(saleItem, cancellationToken);
     }
 
     /// <summary>
@@ -133,6 +143,9 @@ public class SaleService : ISaleService
         existingSale.SaleDate = sale.SaleDate;
         existingSale.TotalValue = sale.TotalValue;
         existingSale.IsCancelled = sale.IsCancelled;
+        existingSale.SaleNumber = sale.SaleNumber;
+        existingSale.Client = sale.Client;
+        existingSale.Branch = sale.Branch;
 
         await _saleRepository.UpdateAsync(existingSale, cancellationToken);
     }
@@ -145,9 +158,11 @@ public class SaleService : ISaleService
         var existingSaleItem = await _saleRepository.GetSaleItemByIdAsync(saleItem.Id, cancellationToken);
         if (existingSaleItem == null) throw new Exception("Item da venda não encontrado.");
 
+        existingSaleItem.Product = saleItem.Product;
         existingSaleItem.Quantity = saleItem.Quantity;
         existingSaleItem.UnitPrice = saleItem.UnitPrice;
         existingSaleItem.IsCancelled = saleItem.IsCancelled;
+        existingSaleItem.Discount = saleItem.Discount;
 
         await _saleRepository.UpdateSaleItemAsync(existingSaleItem, cancellationToken);
     }

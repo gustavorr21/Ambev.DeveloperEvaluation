@@ -11,9 +11,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sale
         {
             CreateMap<CreateSaleRequest, CreateSaleCommand>()
                 .ForMember(dest => dest.SaleNumber, opt => opt.MapFrom(src => src.SaleNumber))
-                .ForMember(dest => dest.SaleDate, opt => opt.MapFrom(src => src.SaleDate))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-                .ForMember(dest => dest.TotalValue, opt => opt.MapFrom(src => src.TotalValue))
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch))
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
             CreateMap<CreateSaleRequest, CreateSaleCommand>();

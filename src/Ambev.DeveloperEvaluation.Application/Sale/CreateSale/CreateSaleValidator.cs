@@ -10,15 +10,9 @@ namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale
                 .NotEmpty().WithMessage("Sale number is required")
                 .MaximumLength(50).WithMessage("Sale number must not exceed 50 characters");
 
-            RuleFor(x => x.SaleDate)
-                .NotEmpty().WithMessage("Sale date is required");
-
             RuleFor(x => x.Client)
                 .NotEmpty().WithMessage("Client is required")
                 .MaximumLength(100).WithMessage("Client name must not exceed 100 characters");
-
-            RuleFor(x => x.TotalValue)
-                .GreaterThan(0).WithMessage("Total value must be greater than 0");
 
             RuleFor(x => x.Branch)
                 .NotEmpty().WithMessage("Branch is required");

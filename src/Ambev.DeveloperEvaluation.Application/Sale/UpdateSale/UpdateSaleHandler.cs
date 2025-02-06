@@ -16,6 +16,13 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand>
     public async Task Handle(UpdateSaleCommand request, CancellationToken cancellationToken)
     {
         var sale = await _saleService.GetByIdAsync(request.SaleId, cancellationToken);
+        if (sale == null) throw new Exception("Venda não encontrada.");
+
+        sale.SaleNumber = request.Request.SaleNumber;
+        sale.Client = request.Request.Client;
+        sale.Branch = request.Request.Branch;
+        sale.TotalValue = request.Request.TotalValue;
+        sale.IsCancelled = request.Request.IsCancelled;
 
         await _saleService.UpdateSaleAsync(sale, cancellationToken);
         await _mediator.Publish(new SaleModifiedEvent(request.SaleId), cancellationToken);

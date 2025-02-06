@@ -22,7 +22,6 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResponse>
             return null;
         }
 
-   
         return _mapper.Map<GetSaleResponse>(sale);
     }
 }

@@ -6,22 +6,28 @@ public class DiscountService
     {
         foreach (var item in sale.Items)
         {
+            decimal originalPrice = item.UnitPrice;
+            item.Discount = 0m;
+
             if (item.Quantity < 4)
             {
-                item.UnitPrice = item.UnitPrice;
+                item.UnitPrice = originalPrice;
             }
             else if (item.Quantity >= 4 && item.Quantity < 10)
             {
-                item.UnitPrice *= 0.90m;
+                item.Discount = originalPrice * 0.10m;
+                item.UnitPrice = originalPrice - item.Discount;
             }
             else if (item.Quantity >= 10 && item.Quantity <= 20)
             {
-                item.UnitPrice *= 0.80m;
+                item.Discount = originalPrice * 0.20m;
+                item.UnitPrice = originalPrice - item.Discount;
             }
             else if (item.Quantity > 20)
             {
                 item.Quantity = 20;
-                item.UnitPrice *= 0.80m;
+                item.Discount = originalPrice * 0.20m;
+                item.UnitPrice = originalPrice - item.Discount;
             }
         }
     }

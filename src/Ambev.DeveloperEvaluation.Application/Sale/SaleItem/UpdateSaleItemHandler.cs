@@ -20,9 +20,11 @@ public class UpdateSaleItemCommandHandler : IRequestHandler<UpdateSaleItemComman
         var saleItem = await _saleService.GetSaleItemByIdAsync(request.SaleItemId, cancellationToken);
         if (saleItem == null) throw new Exception("Item da venda não encontrado.");
 
+        saleItem.Product = request.Request.Product;
         saleItem.Quantity = request.Request.Quantity;
-        saleItem.UnitPrice = request.Request.Price;
+        saleItem.UnitPrice = request.Request.UnitPrice;
         saleItem.IsCancelled = request.Request.IsCancelled;
+        saleItem.Discount = request.Request.Discount;
 
         await _saleService.UpdateSaleItemAsync(saleItem, cancellationToken);
 
