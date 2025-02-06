@@ -49,6 +49,18 @@ public class SalesController : BaseController
                 Message = "Validation failed"
             });
 
+        foreach (var item in request.Items)
+        {
+            if (item.Quantity > 20)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Não é possível vender mais de 20 itens idênticos."
+                });
+            }
+        }
+
         // Mapeamento para o CreateSaleCommand
         var command = _mapper.Map<CreateSaleCommand>(request);
 
