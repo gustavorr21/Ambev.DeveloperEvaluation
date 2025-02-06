@@ -1,22 +1,28 @@
-﻿public class DiscountService
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+
+public class DiscountService
 {
-    public decimal ApplyDiscount(int quantity, decimal unitPrice)
+    public void ApplyDiscounts(SalesEntity sale)
     {
-        if (quantity < 4)
+        foreach (var item in sale.Items)
         {
-            return 0;
+            if (item.Quantity < 4)
+            {
+                item.UnitPrice = item.UnitPrice;
+            }
+            else if (item.Quantity >= 4 && item.Quantity < 10)
+            {
+                item.UnitPrice *= 0.90m;
+            }
+            else if (item.Quantity >= 10 && item.Quantity <= 20)
+            {
+                item.UnitPrice *= 0.80m;
+            }
+            else if (item.Quantity > 20)
+            {
+                item.Quantity = 20;
+                item.UnitPrice *= 0.80m;
+            }
         }
-
-        if (quantity >= 4 && quantity <= 9)
-        {
-            return 0.10m * (unitPrice * quantity);
-        }
-
-        if (quantity >= 10 && quantity <= 20)
-        {
-            return 0.20m * (unitPrice * quantity);
-        }
-
-        throw new InvalidOperationException("Não é possível vender mais de 20 itens idênticos.");
     }
 }

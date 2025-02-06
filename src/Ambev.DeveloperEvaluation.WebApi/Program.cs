@@ -38,6 +38,7 @@ public class Program
                 )
             );
             builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+            builder.Services.AddScoped<DiscountService>();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
