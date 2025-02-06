@@ -11,33 +11,24 @@ namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale
     {
         private readonly ISaleService _saleService;
         private readonly IMapper _mapper;
-        private readonly DiscountService _discountService;
         private readonly IMediator _mediator;
 
         public CreateSaleHandler(
             ISaleService saleService,
             IMapper mapper, 
-            DiscountService discountService,
             IMediator mediator)
         {
             _saleService = saleService;
             _mapper = mapper;
-            _discountService = discountService;
             _mediator = mediator;
         }
 
         public async Task<CreateSaleResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
         {
-            var sale = _mapper.Map<SalesEntity>(request);
-            sale.SaleDate = sale.SaleDate.ToLocalTime();
-
-            _discountService.ApplyDiscounts(sale);
-            sale.TotalValue = sale.Items.Sum(item => item.Quantity * item.UnitPrice);
-
+            var sale = _mapper.Map<SalesEntity>(request);           
             var createdSale = await _saleService.CreateAsync(sale, cancellationToken);
 
             return _mapper.Map<CreateSaleResult>(createdSale);
         }
-
     }
 }

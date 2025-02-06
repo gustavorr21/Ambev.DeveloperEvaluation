@@ -10,12 +10,20 @@ public class SaleService : ISaleService
     private readonly ISaleRepository _saleRepository;
     private readonly IMediator _mediator;
     private readonly ILogger<SaleService> _logger;
+    private readonly DiscountService _discountService;
 
-    public SaleService(ISaleRepository saleRepository, IMediator mediator, ILogger<SaleService> logger)
+    public SaleService(
+        ISaleRepository saleRepository,
+        IMediator mediator,
+        ILogger<SaleService> logger,
+        DiscountService discountService
+        )
     {
         _saleRepository = saleRepository;
         _mediator = mediator;
         _logger = logger;
+        _discountService = discountService;
+
     }
 
     /// <summary>
@@ -23,7 +31,10 @@ public class SaleService : ISaleService
     /// </summary>
     public async Task<SalesEntity> CreateAsync(SalesEntity sale, CancellationToken cancellationToken)
     {
-        sale.SaleDate = sale.SaleDate.ToLocalTime();
+        _discountService.ApplyDiscounts(sale);
+        sale.TotalValue = sale.Items.Sum(item => item.Quantity * item.UnitPrice);
+        sale.SaleDate = DateTime.Now;
+
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
 
         await _mediator.Publish(new SaleCreatedEvent(createdSale.Id), cancellationToken);
