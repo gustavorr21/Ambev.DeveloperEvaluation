@@ -42,29 +42,16 @@ public class SalesController : BaseController
         var validator = new CreateSaleValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (!validationResult.IsValid)
+        if (!validationResult.IsValid) { 
             return BadRequest(new ApiResponse
             {
                 Success = false,
                 Message = "Validation failed"
             });
-
-        foreach (var item in request.Items)
-        {
-            if (item.Quantity > 20)
-            {
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Message = "Não é possível vender mais de 20 itens idênticos."
-                });
-            }
         }
 
-        // Mapeamento para o CreateSaleCommand
         var command = _mapper.Map<CreateSaleCommand>(request);
 
-        // Enviar comando via MediatR
         var response = await _mediator.Send(command, cancellationToken);
 
         return Created(string.Empty, new ApiResponseWithData<CreateSaleResult>
@@ -74,7 +61,6 @@ public class SalesController : BaseController
             Data = _mapper.Map<CreateSaleResult>(response)
         });
     }
-
 
 
     /// <summary>
@@ -88,13 +74,10 @@ public class SalesController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        // Cria o comando com o Id da venda que está sendo buscada
         var command = new GetSaleCommand { Id = id };
 
-        // Envia o comando ao Mediator para ser processado pelo handler
         var response = await _mediator.Send(command, cancellationToken);
 
-        // Se a resposta for null, significa que a venda não foi encontrada
         if (response == null)
             return NotFound(new ApiResponse
             {
@@ -102,7 +85,6 @@ public class SalesController : BaseController
                 Message = "Sale not found"
             });
 
-        // Caso a venda seja encontrada, retorna a resposta com sucesso
         return Ok(new ApiResponseWithData<GetSaleResponse>
         {
             Success = true,
@@ -141,4 +123,92 @@ public class SalesController : BaseController
             Message = "Sale deleted successfully"
         });
     }
+
+    /// <summary>
+    /// Cancels a sale by its ID
+    /// </summary>
+    /// <param name="saleId">The sale ID</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A confirmation message</returns>
+    [HttpPut("{saleId}/cancel")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelSale(Guid saleId, CancellationToken cancellationToken)
+    {
+        var command = new CancelSaleCommand(saleId);
+        await _mediator.Send(command, cancellationToken);
+
+        return Ok(new ApiResponse
+        {
+            Success = true,
+            Message = "Sale cancelled successfully"
+        });
+    }
+
+    /// <summary>
+    /// Cancels a sale item by its ID
+    /// </summary>
+    /// <param name="saleItemId">The sale item ID</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A confirmation message</returns>
+    [HttpPut("items/{saleItemId}/cancel")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelSaleItem(Guid saleItemId, CancellationToken cancellationToken)
+    {
+        var command = new CancelSaleItemCommand(saleItemId);
+        await _mediator.Send(command, cancellationToken);
+
+        return Ok(new ApiResponse
+        {
+            Success = true,
+            Message = "Sale item cancelled successfully"
+        });
+    }
+
+    /// <summary>
+    /// Updates a sale
+    /// </summary>
+    /// <param name="saleId">The sale ID</param>
+    /// <param name="request">The sale update request</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A confirmation message</returns>
+    [HttpPut("{saleId}")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateSale(Guid saleId, [FromBody] UpdateSaleRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateSaleCommand(saleId, request);
+        await _mediator.Send(command, cancellationToken);
+
+        return Ok(new ApiResponse
+        {
+            Success = true,
+            Message = "Sale updated successfully"
+        });
+    }
+
+    /// <summary>
+    /// Updates a sale item
+    /// </summary>
+    /// <param name="saleItemId">The sale item ID</param>
+    /// <param name="request">The sale item update request</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A confirmation message</returns>
+    [HttpPut("items/{saleItemId}")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateSaleItem(Guid saleItemId, [FromBody] UpdateSaleItemRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateSaleItemCommand(saleItemId, request);
+        await _mediator.Send(command, cancellationToken);
+
+        return Ok(new ApiResponse
+        {
+            Success = true,
+            Message = "Sale item updated successfully"
+        });
+    }
+
+
 }

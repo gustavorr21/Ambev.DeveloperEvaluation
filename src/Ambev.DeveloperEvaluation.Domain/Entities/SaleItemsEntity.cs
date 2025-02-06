@@ -9,6 +9,7 @@
         public decimal Discount { get; set; }
         public decimal TotalAmount => Quantity * UnitPrice - Discount;
         public Guid SaleId { get; set; }
+        public bool IsCancelled { get; set; }
         public SalesEntity Sale { get; set; }
     }
 }

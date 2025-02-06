@@ -4,6 +4,7 @@ using Ambev.DeveloperEvaluation.Common.Logging;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using Ambev.DeveloperEvaluation.Domain.Services;
 using Ambev.DeveloperEvaluation.Infrastructure.Repositories;
 using Ambev.DeveloperEvaluation.IoC;
 using Ambev.DeveloperEvaluation.ORM;
@@ -38,7 +39,9 @@ public class Program
                 )
             );
             builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+            builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<DiscountService>();
+            builder.Services.AddLogging();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
