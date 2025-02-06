@@ -9,13 +9,11 @@ namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
-        private readonly DiscountService _discountService;
 
-        public CreateSaleHandler(ISaleRepository saleRepository, IMapper mapper, DiscountService discountService)
+        public CreateSaleHandler(ISaleRepository saleRepository, IMapper mapper)
         {
             _saleRepository = saleRepository;
             _mapper = mapper;
-            _discountService = discountService;
         }
 
         public async Task<CreateSaleResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
@@ -25,7 +23,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale
 
             foreach (var item in sale.Items)
             {
-                item.Discount = _discountService.ApplyDiscount(item.Quantity, item.UnitPrice);
+                //item.Discount = _discountService.ApplyDiscount(item.Quantity, item.UnitPrice);
             }
 
             var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
