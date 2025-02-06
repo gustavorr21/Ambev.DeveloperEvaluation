@@ -1,31 +1,28 @@
-﻿using MediatR;
-using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+using AutoMapper;
+using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Sale.GetSale
+public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResponse>
 {
-    public class GetSaleHandler : IRequestHandler<GetSaleQuery, GetSaleResult>
+    private readonly ISaleRepository _saleRepository;
+    private readonly IMapper _mapper;
+
+    public GetSaleHandler(ISaleRepository saleRepository, IMapper mapper)
     {
-        private readonly ISaleRepository _saleRepository;
+        _saleRepository = saleRepository;
+        _mapper = mapper;
+    }
 
-        public GetSaleHandler(ISaleRepository saleRepository)
+    public async Task<GetSaleResponse> Handle(GetSaleCommand request, CancellationToken cancellationToken)
+    {
+        var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken);
+
+        if (sale == null)
         {
-            _saleRepository = saleRepository;
+            return null;
         }
 
-        public async Task<GetSaleResult> Handle(GetSaleQuery request, CancellationToken cancellationToken)
-        {
-            var sale = await _saleRepository.GetByIdAsync(request.SaleId, cancellationToken);
-            if (sale == null) throw new InvalidOperationException("Sale not found");
-
-            return new GetSaleResult
-            {
-                Id = sale.Id,
-                SaleNumber = sale.SaleNumber,
-                SaleDate = sale.SaleDate,
-                Client = sale.Client,
-                TotalValue = sale.TotalValue,
-                Branch = sale.Branch
-            };
-        }
+   
+        return _mapper.Map<GetSaleResponse>(sale);
     }
 }

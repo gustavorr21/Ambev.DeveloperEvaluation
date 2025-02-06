@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sale.DeleteSale
 {
-    public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleResult>
+    public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, bool>
     {
         private readonly ISaleRepository _saleRepository;
 
@@ -12,13 +12,15 @@ namespace Ambev.DeveloperEvaluation.Application.Sale.DeleteSale
             _saleRepository = saleRepository;
         }
 
-        public async Task<DeleteSaleResult> Handle(DeleteSaleCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteSaleCommand request, CancellationToken cancellationToken)
         {
-            var sale = await _saleRepository.GetByIdAsync(request.SaleId, cancellationToken);
-            if (sale == null) throw new InvalidOperationException("Sale not found");
+            var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken);
+
+            if (sale == null)
+                return false;
 
             await _saleRepository.DeleteAsync(sale, cancellationToken);
-            return new DeleteSaleResult { Success = true };
+            return true;
         }
     }
 }

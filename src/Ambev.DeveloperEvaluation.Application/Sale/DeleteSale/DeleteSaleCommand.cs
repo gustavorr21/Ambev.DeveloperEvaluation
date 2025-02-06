@@ -2,8 +2,8 @@
 
 namespace Ambev.DeveloperEvaluation.Application.Sale.DeleteSale
 {
-    public class DeleteSaleCommand : IRequest<DeleteSaleResult>
+    public class DeleteSaleCommand : IRequest<bool>
     {
-        public Guid SaleId { get; set; }
+        public Guid Id { get; set; }
     }
 }
