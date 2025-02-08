@@ -1,18 +1,18 @@
-<h2 mat-dialog-title>Adicionar Nova Venda</h2>
+<h2 mat-dialog-title>Add New Sale</h2>
 <mat-dialog-content>
     <form [formGroup]="saleForm">
         <mat-form-field class="full-width">
-            <mat-label>Cliente</mat-label>
+            <mat-label>Customer</mat-label>
             <input matInput formControlName="client">
         </mat-form-field>
 
         <mat-form-field class="full-width">
-            <mat-label>Filial</mat-label>
+            <mat-label>Branch</mat-label>
             <input matInput formControlName="branch">
         </mat-form-field>
 
         <mat-form-field class="full-width">
-            <mat-label>Venda</mat-label>
+            <mat-label>Sale number</mat-label>
             <input matInput formControlName="saleNumber">
         </mat-form-field>
 
@@ -21,21 +21,21 @@
             <input matInput formControlName="totalValue" type="number" readonly>
         </mat-form-field>
 
-        <h3>Itens da Venda</h3>
+        <h3>Items</h3>
         <div class="sale-details">
             <div formArrayName="items">
                 <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="row mb-3">
 
                     <div class="col-12 col-md-2">
                         <mat-form-field class="full-width">
-                            <mat-label>Produto</mat-label>
+                            <mat-label>Product</mat-label>
                             <input matInput formControlName="product" required>
                         </mat-form-field>
                     </div>
 
                     <div class="col-12 col-md-2">
                         <mat-form-field class="full-width">
-                            <mat-label>Quantidade</mat-label>
+                            <mat-label>Quantities</mat-label>
                             <input matInput type="number" formControlName="quantity" (input)="calculateTotal()"
                                 required>
                         </mat-form-field>
@@ -43,7 +43,7 @@
 
                     <div class="col-12 col-md-2">
                         <mat-form-field class="full-width">
-                            <mat-label>Preço Unitário</mat-label>
+                            <mat-label>Price</mat-label>
                             <input matInput type="number" formControlName="unitPrice" (input)="calculateTotal()"
                                 required>
                         </mat-form-field>
@@ -51,25 +51,25 @@
 
                     <div class="col-12 col-md-2">
                         <mat-form-field class="full-width">
-                            <mat-label>Desconto R$</mat-label>
+                            <mat-label>Discount R$</mat-label>
                             <input matInput type="number" formControlName="discount" readonly>
                         </mat-form-field>
                     </div>
 
                     <div class="col-12 col-md-2 d-flex align-items-center justify-content-end">
-                        <button mat-button color="warn" (click)="removeItem(i)">Remover</button>
+                        <button mat-button color="warn" (click)="removeItem(i)">Remove</button>
                     </div>
                 </div>
             </div>
 
             <div class="total-discount">
                 <mat-form-field class="full-width">
-                    <mat-label>Desconto Total</mat-label>
+                    <mat-label>Discounts Total</mat-label>
                     <input matInput type="number" [value]="getTotalDiscount() | number:'1.2-2'" readonly>
                 </mat-form-field>
             </div>
 
-            <button mat-button color="primary" (click)="addItem()">Adicionar Item</button>
+            <button mat-button color="primary" (click)="addItem()">Add Item</button>
 
         </div>
 
@@ -77,6 +77,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" (click)="createSale()">Salvar</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button color="primary" (click)="createSale()">Salve</button>
 </mat-dialog-actions>
