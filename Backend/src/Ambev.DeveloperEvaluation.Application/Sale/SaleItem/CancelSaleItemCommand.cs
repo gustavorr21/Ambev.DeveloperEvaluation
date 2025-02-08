@@ -1,3 +1,3 @@
 ﻿using MediatR;
 
-public record CancelSaleItemCommand(Guid SaleItemId) : IRequest;
+public record CancelSaleItemCommand(Guid SaleItemId, bool isCancelled) : IRequest;

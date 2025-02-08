@@ -66,8 +66,6 @@ public class SaleService : ISaleService
     public async Task UpdateAsync(SalesEntity sale, CancellationToken cancellationToken)
     {
         await _saleRepository.UpdateAsync(sale, cancellationToken);
-
-        // Publica evento de venda modificada
         await _mediator.Publish(new SaleModifiedEvent(sale.Id), cancellationToken);
 
         _logger.LogInformation($"Venda {sale.Id} atualizada.");
@@ -133,14 +131,16 @@ public class SaleService : ISaleService
     /// <summary>
     /// Cancela um item de venda
     /// </summary>
-    public async Task CancelSaleItemAsync(Guid saleItemId, CancellationToken cancellationToken)
+    public async Task CancelSaleItemAsync(Guid saleItemId, bool isCancelled, CancellationToken cancellationToken)
     {
         var saleItem = await _saleRepository.GetSaleItemByIdAsync(saleItemId, cancellationToken);
         if (saleItem == null) throw new Exception("Item de venda não encontrado.");
 
-        saleItem.IsCancelled = true;
+        saleItem.IsCancelled = isCancelled;
 
         await _saleRepository.UpdateSaleItemAsync(saleItem, cancellationToken);
+
+        await _mediator.Publish(new SaleItemCancelledEvent(saleItemId), cancellationToken);
     }
 
     /// <summary>

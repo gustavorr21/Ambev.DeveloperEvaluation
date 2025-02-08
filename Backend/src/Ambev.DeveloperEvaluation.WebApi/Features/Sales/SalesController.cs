@@ -181,12 +181,12 @@ public class SalesController : BaseController
     /// <param name="saleItemId">The sale item ID</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A confirmation message</returns>
-    [HttpPut("items/{saleItemId}/cancel")]
+    [HttpPut("items/{saleItemId}/cancel/{isCancelled}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CancelSaleItem(Guid saleItemId, CancellationToken cancellationToken)
+    public async Task<IActionResult> CancelSaleItem(Guid saleItemId, bool isCancelled, CancellationToken cancellationToken)
     {
-        var command = new CancelSaleItemCommand(saleItemId);
+        var command = new CancelSaleItemCommand(saleItemId, isCancelled);
         await _mediator.Send(command, cancellationToken);
 
         return Ok(new ApiResponse
@@ -217,28 +217,4 @@ public class SalesController : BaseController
             Message = "Sale updated successfully"
         });
     }
-
-    /// <summary>
-    /// Updates a sale item
-    /// </summary>
-    /// <param name="saleItemId">The sale item ID</param>
-    /// <param name="request">The sale item update request</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>A confirmation message</returns>
-    [HttpPut("items/{saleItemId}")]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateSaleItem(Guid saleItemId, [FromBody] UpdateSaleItemRequest request, CancellationToken cancellationToken)
-    {
-        var command = new UpdateSaleItemCommand(saleItemId, request);
-        await _mediator.Send(command, cancellationToken);
-
-        return Ok(new ApiResponse
-        {
-            Success = true,
-            Message = "Sale item updated successfully"
-        });
-    }
-
-
 }

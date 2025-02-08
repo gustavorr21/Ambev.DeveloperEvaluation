@@ -50,8 +50,23 @@ export class SalesEditComponent implements OnInit {
   onDeleteItem(item: any): void {
     console.log('Excluindo item:', item);
   }
-
   onToggleStatus(item: any): void {
-    item.isCancelled = !item.isCancelled;
+    const isNowCancelled = !item.isCancelled;
+    item.isCancelled = isNowCancelled;
+
+    this.salesService.cancelSaleItem(item.id, isNowCancelled).subscribe({
+      next: () => {
+        const message = isNowCancelled
+          ? 'Item de venda inativado com sucesso!'
+          : 'Item de venda ativado com sucesso!';
+        this.toastr.success(message);
+      },
+      error: () => {
+        const errorMessage = isNowCancelled
+          ? 'Erro ao inativar o item da venda'
+          : 'Erro ao ativar o item da venda';
+        this.toastr.error(errorMessage);
+      },
+    });
   }
 }

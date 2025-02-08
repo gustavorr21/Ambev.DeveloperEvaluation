@@ -34,7 +34,10 @@ export class SalesService {
     return this.http.delete(`${this.apiUrl}/${saleId}`);
   }
 
-  cancelSaleItem(saleId: string, itemId: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/cancel-item/${saleId}/${itemId}`, {});
+  cancelSaleItem(itemId: string, isCancelled: boolean): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/items/${itemId}/cancel/${isCancelled}`,
+      {}
+    );
   }
 }
