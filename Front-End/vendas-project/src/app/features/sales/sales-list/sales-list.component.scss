@@ -33,3 +33,13 @@ mat-slide-toggle {
 button mat-icon {
     font-size: 20px;
 }
+
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+mat-dialog-actions {
+    padding-top: 10px;
+}

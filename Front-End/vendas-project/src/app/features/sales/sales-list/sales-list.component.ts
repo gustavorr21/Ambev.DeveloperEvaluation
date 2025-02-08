@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { SalesEditComponent } from '../sales-edit/sales-edit.component';
 import { DeleteSaleDialogComponent } from '../delete-sale-dialog/delete-sale-dialog.component';
+import { CreateSaleComponent } from '../create-sale/create-sale.component';
 
 @Component({
   selector: 'app-sales-list',
@@ -81,6 +82,19 @@ export class SalesListComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadSales();
+      }
+    });
+  }
+
+  openAddSaleDialog(): void {
+    const dialogRef = this.dialog.open(CreateSaleComponent, {
+      width: '90%',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dataSource.data.push(result);
+        this.dataSource._updateChangeSubscription();
       }
     });
   }
