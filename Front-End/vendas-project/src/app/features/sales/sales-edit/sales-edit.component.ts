@@ -94,10 +94,29 @@ export class SalesEditComponent implements OnInit {
   }
 
   getTotalDiscount() {
-    return this.items.controls.reduce(
-      (total, item) => total + (item.get('discount')?.value || 0),
-      0
-    );
+    let totalDiscount = 0;
+
+    this.items.controls.forEach((item) => {
+      const quantity = item.get('quantity')?.value || 0;
+      const unitPrice = item.get('unitPrice')?.value || 0;
+      let discount = 0;
+
+      if (quantity >= 10 && quantity <= 20) {
+        discount = 0.2;
+      } else if (quantity >= 4) {
+        discount = 0.1;
+      }
+
+      const itemDiscount = unitPrice * quantity * discount;
+
+      item
+        .get('discount')
+        ?.setValue(this.decimalPipe.transform(itemDiscount, '1.2-2'));
+
+      totalDiscount += itemDiscount;
+    });
+
+    return totalDiscount;
   }
 
   updateSale(): void {
@@ -107,10 +126,10 @@ export class SalesEditComponent implements OnInit {
       this.salesService.updateSale(this.data.id, saleData).subscribe(
         () => {
           this.dialogRef.close(true);
-          this.toastr.success('Venda criada com sucesso!');
+          this.toastr.success('Successfully created sale!');
         },
         (error) => {
-          this.toastr.error('Erro ao criar venda!');
+          this.toastr.error('Error creating sale!');
         }
       );
     }

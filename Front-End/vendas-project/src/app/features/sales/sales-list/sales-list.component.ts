@@ -49,17 +49,17 @@ export class SalesListComponent implements OnInit, AfterViewInit {
 
   toggleStatus(sale: any): void {
     sale.isCancelled = !sale.isCancelled;
-    const statusMessage = sale.isCancelled ? 'Ativada' : 'Inativada';
+    const statusMessage = sale.isCancelled ? 'Activated' : 'Inactivated';
 
     this.salesService.cancelSale(sale.id, sale.isCancelled).subscribe(() => {
-      this.toastr.success(`Venda ${statusMessage} com sucesso`);
+      this.toastr.success(`Sale ${statusMessage} success`);
       this.loadSales();
     });
   }
 
   deleteSale(saleId: string): void {
     this.salesService.deleteSale(saleId).subscribe(() => {
-      this.toastr.success(`Venda deletada com sucesso`);
+      this.toastr.success(`Successfully deleted sale`);
       this.loadSales();
     });
   }

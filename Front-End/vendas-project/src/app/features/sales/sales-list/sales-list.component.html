@@ -1,7 +1,7 @@
 <div class="table-container">
     <div class="header-actions">
         <button mat-raised-button color="primary" (click)="openAddSaleDialog()">
-            <mat-icon>add</mat-icon> Adicionar Venda
+            <mat-icon>add</mat-icon> New Sale
         </button>
     </div>
 
@@ -12,7 +12,7 @@
         </ng-container>
 
         <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Data</th>
+            <th mat-header-cell *matHeaderCellDef>Date</th>
             <td mat-cell *matCellDef="let sale">{{ sale.saleDate | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
 
@@ -22,7 +22,7 @@
         </ng-container>
 
         <ng-container matColumnDef="isCancelled">
-            <th mat-header-cell *matHeaderCellDef>Ativo</th>
+            <th mat-header-cell *matHeaderCellDef>Active</th>
             <td mat-cell *matCellDef="let sale">
                 <mat-slide-toggle (change)="toggleStatus(sale)" [checked]="sale.isCancelled"
                     color="primary"></mat-slide-toggle>
@@ -30,7 +30,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <th mat-header-cell *matHeaderCellDef>Action</th>
             <td mat-cell *matCellDef="let sale">
                 <button mat-icon-button color="primary" (click)="openEditDialog(sale)">
                     <mat-icon>edit</mat-icon>

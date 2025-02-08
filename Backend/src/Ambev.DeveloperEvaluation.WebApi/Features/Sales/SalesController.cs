@@ -42,7 +42,8 @@ public class SalesController : BaseController
         var validator = new CreateSaleValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (!validationResult.IsValid) { 
+        if (!validationResult.IsValid)
+        {
             return BadRequest(new ApiResponse
             {
                 Success = false,
@@ -74,7 +75,7 @@ public class SalesController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var command = new GetSaleCommand { Id = id };
+        var command = new GetSaleCommand(id);
 
         var response = await _mediator.Send(command, cancellationToken);
 

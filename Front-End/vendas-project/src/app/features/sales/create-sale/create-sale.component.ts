@@ -85,7 +85,7 @@ export class CreateSaleComponent implements OnInit {
   }
 
   getTotalDiscount() {
-    return this.items.controls.reduce(
+    return this.items?.controls.reduce(
       (total, item) => total + (item.get('discount')?.value || 0),
       0
     );
@@ -96,10 +96,10 @@ export class CreateSaleComponent implements OnInit {
       this.salesService.createSale(this.saleForm.value).subscribe(
         () => {
           this.dialogRef.close(true);
-          this.toastr.success('Venda criada com sucesso!');
+          this.toastr.success('Successfully created sale!');
         },
         (error) => {
-          this.toastr.error('Erro ao criar venda!');
+          this.toastr.error('Error creating sale!');
         }
       );
     }

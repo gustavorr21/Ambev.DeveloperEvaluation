@@ -29,7 +29,8 @@ public class GetAllSalesCommandHandler : IRequestHandler<GetAllSalesCommand, IEn
                 Id = item.Id,
                 Product = item.Product,
                 Quantity = item.Quantity,
-                UnitPrice = item.UnitPrice
+                UnitPrice = item.UnitPrice,
+                Discount = item.Discount
             }).ToList()
         });
     }
