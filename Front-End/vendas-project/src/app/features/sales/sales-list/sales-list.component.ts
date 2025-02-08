@@ -1,16 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { SalesService } from 'src/app/core/services/sales.service';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Subject, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { SalesEditComponent } from '../sales-edit/sales-edit.component';
@@ -32,7 +23,6 @@ export class SalesListComponent implements OnInit, AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private salesService: SalesService,
-    private router: Router,
     private toastr: ToastrService
   ) {}
 
@@ -63,12 +53,7 @@ export class SalesListComponent implements OnInit, AfterViewInit {
 
   deleteSale(saleId: string): void {
     this.salesService.deleteSale(saleId).subscribe(() => {
-      this.loadSales();
-    });
-  }
-
-  cancelSaleItem(saleId: string, itemId: string): void {
-    this.salesService.cancelSaleItem(saleId, itemId).subscribe(() => {
+      this.toastr.success(`Venda deletada com sucesso`);
       this.loadSales();
     });
   }
@@ -93,8 +78,7 @@ export class SalesListComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dataSource.data.push(result);
-        this.dataSource._updateChangeSubscription();
+        this.loadSales();
       }
     });
   }

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { SalesService } from 'src/app/core/services/sales.service';
 
 @Component({
@@ -15,12 +16,13 @@ export class CreateSaleComponent implements OnInit {
     public dialogRef: MatDialogRef<CreateSaleComponent>,
     private salesService: SalesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) {
     this.saleForm = this.fb.group({
       client: ['', Validators.required],
       branch: ['', Validators.required],
-      saleDate: ['', Validators.required],
+      saleNumber: ['', Validators.required],
       totalValue: [{ value: 0, disabled: true }],
       items: this.fb.array([]),
     });
@@ -94,10 +96,10 @@ export class CreateSaleComponent implements OnInit {
       this.salesService.createSale(this.saleForm.value).subscribe(
         () => {
           this.dialogRef.close(true);
-          alert('Venda criada com sucesso!');
+          this.toastr.success('Venda criada com sucesso!');
         },
         (error) => {
-          alert('Erro ao criar venda: ' + error.message);
+          this.toastr.error('Erro ao criar venda!');
         }
       );
     }

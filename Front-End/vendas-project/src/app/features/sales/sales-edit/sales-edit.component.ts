@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { SalesService } from 'src/app/core/services/sales.service';
 
 @Component({
@@ -13,13 +14,13 @@ export class SalesEditComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SalesEditComponent>,
     private salesService: SalesService,
+    private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {}
 
   onSave(): void {
-    // Lógica para salvar os dados alterados
     this.dialogRef.close(this.data);
   }
 
@@ -29,16 +30,15 @@ export class SalesEditComponent implements OnInit {
 
   onEdit(): void {
     if (!this.data || !this.data.id) {
-      console.error('Erro: ID da venda não encontrado.');
       return;
     }
 
     this.salesService.updateSale(this.data.id, this.data).subscribe({
       next: (response) => {
-        console.log('Venda atualizada com sucesso!', response);
+        this.toastr.success('Venda atualizada com sucesso!');
       },
       error: (err) => {
-        console.error('Erro ao atualizar a venda', err);
+        this.toastr.error('Erro ao atualizar a venda');
       },
     });
   }
@@ -53,6 +53,5 @@ export class SalesEditComponent implements OnInit {
 
   onToggleStatus(item: any): void {
     item.isActive = !item.isActive;
-    console.log('Novo status do item:', item.isActive ? 'Ativo' : 'Inativo');
   }
 }

@@ -31,6 +31,7 @@ namespace Ambev.DeveloperEvaluation.Infrastructure.Repositories
         public async Task<List<SalesEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Sales
+                .OrderByDescending(s => s.SaleDate)
                 .Include(s => s.Items)
                 .ToListAsync(cancellationToken);
         }
