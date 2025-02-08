@@ -24,6 +24,17 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand>
         sale.TotalValue = request.Request.TotalValue;
         sale.IsCancelled = request.Request.IsCancelled;
 
+        foreach (var itemRequest in request.Request.Items)
+        {
+            var existingItem = sale.Items.FirstOrDefault(i => i.Id == itemRequest.Id);
+
+            if (existingItem != null)
+            {
+                existingItem.Product = itemRequest.Product;
+                existingItem.Quantity = itemRequest.Quantity;
+                existingItem.UnitPrice = itemRequest.UnitPrice;
+            }
+        }
         await _saleService.UpdateSaleAsync(sale, cancellationToken);
         await _mediator.Publish(new SaleModifiedEvent(request.SaleId), cancellationToken);
     }

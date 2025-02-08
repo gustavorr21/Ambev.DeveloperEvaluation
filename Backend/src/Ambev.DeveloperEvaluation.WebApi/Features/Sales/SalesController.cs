@@ -93,6 +93,36 @@ public class SalesController : BaseController
         });
     }
 
+    /// <summary>
+    /// get all vendas
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponseWithData<IEnumerable<GetSaleResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var command = new GetAllSalesCommand();
+
+        var response = await _mediator.Send(command, cancellationToken);
+
+        if (response == null || !response.Any())
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = "No sales found"
+            });
+
+        return Ok(new ApiResponseWithData<IEnumerable<GetSaleResponse>>
+        {
+            Success = true,
+            Message = "Sales retrieved successfully",
+            Data = response
+        });
+    }
+
 
     /// <summary>
     /// Deletes a sale by its ID
@@ -130,12 +160,12 @@ public class SalesController : BaseController
     /// <param name="saleId">The sale ID</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A confirmation message</returns>
-    [HttpPut("{saleId}/cancel")]
+    [HttpPut("{saleId}/cancel/{isActive}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CancelSale(Guid saleId, CancellationToken cancellationToken)
+    public async Task<IActionResult> CancelSale(Guid saleId, bool isActive, CancellationToken cancellationToken)
     {
-        var command = new CancelSaleCommand(saleId);
+        var command = new CancelSaleCommand(saleId, isActive);
         await _mediator.Send(command, cancellationToken);
 
         return Ok(new ApiResponse

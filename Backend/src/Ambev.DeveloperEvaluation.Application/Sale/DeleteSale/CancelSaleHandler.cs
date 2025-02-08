@@ -15,7 +15,7 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand>
 
     public async Task Handle(CancelSaleCommand request, CancellationToken cancellationToken)
     {
-        await _saleService.CancelSaleAsync(request.SaleId, cancellationToken);
+        await _saleService.CancelSaleAsync(request.SaleId, request.isActive, cancellationToken);
         await _mediator.Publish(new SaleCancelledEvent(request.SaleId), cancellationToken);
     }
 }

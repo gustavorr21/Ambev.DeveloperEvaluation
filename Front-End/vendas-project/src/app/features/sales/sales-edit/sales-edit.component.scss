@@ -1,0 +1,35 @@
+.sale-card {
+    width: 100%;
+    // max-width: 800px;
+    margin: 20px auto;
+}
+
+.sale-details {
+    margin-bottom: 20px;
+}
+
+mat-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    mat-form-field {
+        margin-bottom: 10px;
+    }
+}
