@@ -1,104 +1,95 @@
-<mat-card class="sale-card">
-    <mat-card-header>
-        <mat-card-title>Sale Number - {{ data.saleNumber }}</mat-card-title>
-        <mat-card-subtitle>{{ data.saleDate | date:'short' }}</mat-card-subtitle>
-    </mat-card-header>
+<h2 mat-dialog-title>Editar Venda</h2>
+<mat-dialog-content>
+    <form [formGroup]="editSaleForm">
+        <mat-form-field class="full-width">
+            <mat-label>Cliente</mat-label>
+            <input matInput formControlName="client">
+        </mat-form-field>
 
-    <mat-card-content>
-        <div class="sale-details">
-            <div class="detail-row">
-                <mat-form-field class="full-width">
-                    <mat-label>Cliente</mat-label>
-                    <input matInput [(ngModel)]="data.client" />
-                </mat-form-field>
-            </div>
+        <mat-form-field class="full-width">
+            <mat-label>Filial</mat-label>
+            <input matInput formControlName="branch">
+        </mat-form-field>
 
-            <div class="detail-row">
-                <mat-form-field class="full-width">
-                    <mat-label>Filial</mat-label>
-                    <input matInput [(ngModel)]="data.branch" />
-                </mat-form-field>
-            </div>
-
-            <div class="detail-row">
-                <mat-form-field class="full-width">
-                    <mat-label>Total</mat-label>
-                    <input matInput [(ngModel)]="data.totalValue" type="number" readonly />
-                </mat-form-field>
-            </div>
-
-            <div class="detail-row">
-                <strong>Status:</strong>
-                <mat-slide-toggle [(ngModel)]="data.isCancelled" color="primary">
-                    {{ data.isCancelled ? 'Ativo' : 'Inativo' }}
+        <mat-form-field class="full-width">
+            <mat-label>Venda</mat-label>
+            <input matInput formControlName="saleNumber">
+        </mat-form-field>
+        <div class="col-12 col-md-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>Status</strong>
+                <mat-slide-toggle formControlName="isCancelled" color="primary">
+                    {{ editSaleForm.get('isCancelled')?.value ? 'Ativo' : 'Inativo' }}
                 </mat-slide-toggle>
             </div>
         </div>
+        <mat-form-field class="full-width">
+            <mat-label>Total</mat-label>
+            <input matInput formControlName="totalValue" type="number"
+                [value]="editSaleForm.get('totalValue')?.value | number: '1.2-2'" readonly />
+        </mat-form-field>
+
 
         <h3>Itens da Venda</h3>
-        <mat-table [dataSource]="data.items">
-            <ng-container matColumnDef="product">
-                <th mat-header-cell *matHeaderCellDef>Produto</th>
-                <td mat-cell *matCellDef="let item">
-                    <mat-form-field class="full-width">
-                        <mat-label>Produto</mat-label>
-                        <input matInput [(ngModel)]="item.product" />
-                    </mat-form-field>
-                </td>
-            </ng-container>
+        <div class="sale-details">
+            <div formArrayName="items">
+                <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="row mb-3">
 
-            <ng-container matColumnDef="quantity">
-                <th mat-header-cell *matHeaderCellDef>Quantidade</th>
-                <td mat-cell *matCellDef="let item">
-                    <mat-form-field class="full-width">
-                        <mat-label>Quantidade</mat-label>
-                        <input matInput [(ngModel)]="item.quantity" type="number" />
-                    </mat-form-field>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="unitPrice">
-                <th mat-header-cell *matHeaderCellDef>Preço Unitário</th>
-                <td mat-cell *matCellDef="let item">
-                    <mat-form-field class="full-width">
-                        <mat-label>Preço Unitário</mat-label>
-                        <input matInput [(ngModel)]="item.unitPrice" type="number" />
-                    </mat-form-field>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="isCancelled">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let item">
-                    <mat-form-field class="full-width">
-                        <mat-label>Status</mat-label>
-                        <input matInput [(ngModel)]="item.isCancelled" name="isCancelled" [readonly]="true"
-                            [value]="item.isCancelled ? 'Ativo' : 'Inativo'" />
-                    </mat-form-field>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>Ações</th>
-                <td mat-cell *matCellDef="let item">
-                    <div class="action-buttons">
-                        <button mat-button color="warn" (click)="onDeleteItem(item)">Excluir</button>
-                        <button mat-button color="primary" (click)="onToggleStatus(item)">
-                            {{ item.isCancelled ? 'Desativar' : 'Ativar' }}
-                        </button>
+                    <div class="col-12 col-md-2">
+                        <mat-form-field class="full-width">
+                            <mat-label>Produto</mat-label>
+                            <input matInput formControlName="product" required>
+                        </mat-form-field>
                     </div>
-                </td>
-            </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </mat-table>
-    </mat-card-content>
+                    <div class="col-12 col-md-2">
+                        <mat-form-field class="full-width">
+                            <mat-label>Quantidade</mat-label>
+                            <input matInput type="number" formControlName="quantity" (input)="calculateTotal()"
+                                required>
+                        </mat-form-field>
+                    </div>
 
-    <mat-card-actions>
-        <div class="action-buttons">
-            <button mat-button (click)="onEdit()">Editar</button>
-            <button mat-button color="warn" (click)="onDelete()">Excluir</button>
+                    <div class="col-12 col-md-2">
+                        <mat-form-field class="full-width">
+                            <mat-label>Preço Unitário</mat-label>
+                            <input matInput type="number" formControlName="unitPrice" (input)="calculateTotal()"
+                                required>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-md-2 d-flex align-items-center">
+                        <mat-form-field class="full-width">
+                            <mat-label>Desconto R$</mat-label>
+                            <input matInput type="number" formControlName="discount"
+                                [value]="editSaleForm.get('items')?.value[0]?.discount | number:'1.2-2'" readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-md-2 d-flex align-items-center justify-content-end">
+                        <button mat-button color="warn" (click)="removeItem(i)">Remover</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="total-discount">
+                <mat-form-field class="full-width">
+                    <mat-label>Desconto Total</mat-label>
+                    <input matInput type="number" [value]="getTotalDiscount() | number:'1.2-2'" readonly>
+                </mat-form-field>
+            </div>
+
+            <button mat-button color="primary" (click)="addItem()">Adicionar Item</button>
+
         </div>
-    </mat-card-actions>
-</mat-card>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button color="primary" (click)="updateSale()">Salvar</button>
+</mat-dialog-actions>

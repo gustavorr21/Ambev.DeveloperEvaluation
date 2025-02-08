@@ -34,6 +34,7 @@ public class SaleService : ISaleService
         _discountService.ApplyDiscounts(sale);
         sale.TotalValue = sale.Items.Sum(item => item.Quantity * item.UnitPrice);
         sale.SaleDate = DateTime.Now;
+        sale.IsCancelled = true;
 
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
 

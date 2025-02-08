@@ -66,7 +66,7 @@ export class SalesListComponent implements OnInit, AfterViewInit {
 
   openEditDialog(sale: any): void {
     const dialogRef = this.dialog.open(SalesEditComponent, {
-      width: '960px',
+      width: '90%',
       data: sale,
     });
 

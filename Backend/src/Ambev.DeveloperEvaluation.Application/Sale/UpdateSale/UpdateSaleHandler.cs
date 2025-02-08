@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sale.Events;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Services;
 using MediatR;
 
@@ -34,8 +35,21 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand>
                 existingItem.Quantity = itemRequest.Quantity;
                 existingItem.UnitPrice = itemRequest.UnitPrice;
             }
+            else
+            {
+                var newItem = new SaleItemsEntity
+                {
+                    Product = itemRequest.Product,
+                    Quantity = itemRequest.Quantity,
+                    UnitPrice = itemRequest.UnitPrice,
+                };
+                sale.Items.Add(newItem);
+            }
         }
+
         await _saleService.UpdateSaleAsync(sale, cancellationToken);
+
         await _mediator.Publish(new SaleModifiedEvent(request.SaleId), cancellationToken);
     }
+
 }
