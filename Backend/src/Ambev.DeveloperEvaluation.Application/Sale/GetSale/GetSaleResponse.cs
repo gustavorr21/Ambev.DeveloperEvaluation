@@ -6,7 +6,7 @@
     public string Client { get; set; }
     public decimal TotalValue { get; set; }
     public string Branch { get; set; }
-    public bool isActive { get; set; }
+    public bool IsCancelled { get; set; }
     public List<SaleItemResponse> Items { get; set; }
 }
 

@@ -52,6 +52,6 @@ export class SalesEditComponent implements OnInit {
   }
 
   onToggleStatus(item: any): void {
-    item.isActive = !item.isActive;
+    item.isCancelled = !item.isCancelled;
   }
 }

@@ -11,7 +11,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Services
         Task DeleteAsync(SalesEntity sale, CancellationToken cancellationToken);
         Task<SaleItemsEntity> CreateSaleItemAsync(SaleItemsEntity saleItem, CancellationToken cancellationToken);
         Task DeleteSaleItemAsync(SaleItemsEntity saleItem, CancellationToken cancellationToken);
-        Task CancelSaleAsync(Guid saleId, bool isActive, CancellationToken cancellationToken);
+        Task CancelSaleAsync(Guid saleId, bool isCancelled, CancellationToken cancellationToken);
         Task CancelSaleItemAsync(Guid saleItemId, CancellationToken cancellationToken);
         Task UpdateSaleAsync(SalesEntity sale, CancellationToken cancellationToken);
         Task UpdateSaleItemAsync(SaleItemsEntity saleItem, CancellationToken cancellationToken);

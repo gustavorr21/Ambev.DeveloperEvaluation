@@ -14,7 +14,13 @@ import { CreateSaleComponent } from '../create-sale/create-sale.component';
   styleUrls: ['./sales-list.component.scss'],
 })
 export class SalesListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'date', 'total', 'isActive', 'actions'];
+  displayedColumns: string[] = [
+    'id',
+    'date',
+    'total',
+    'isCancelled',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<any>();
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 25, 100];
@@ -42,10 +48,10 @@ export class SalesListComponent implements OnInit, AfterViewInit {
   }
 
   toggleStatus(sale: any): void {
-    sale.isActive = !sale.isActive;
-    const statusMessage = sale.isActive ? 'Ativada' : 'Inativada';
+    sale.isCancelled = !sale.isCancelled;
+    const statusMessage = sale.isCancelled ? 'Ativada' : 'Inativada';
 
-    this.salesService.cancelSale(sale.id, sale.isActive).subscribe(() => {
+    this.salesService.cancelSale(sale.id, sale.isCancelled).subscribe(() => {
       this.toastr.success(`Venda ${statusMessage} com sucesso`);
       this.loadSales();
     });

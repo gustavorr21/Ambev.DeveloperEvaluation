@@ -21,7 +21,7 @@ public class GetAllSalesCommandHandler : IRequestHandler<GetAllSalesCommand, IEn
             SaleDate = sale.SaleDate,
             Branch = sale.Branch,
             Client = sale.Client,
-            isActive = sale.IsCancelled,
+            IsCancelled = sale.IsCancelled,
             SaleNumber = sale.SaleNumber,
             TotalValue = sale.TotalValue,
             Items = sale.Items.Select(item => new SaleItemResponse

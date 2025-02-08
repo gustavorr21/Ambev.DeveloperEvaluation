@@ -109,16 +109,16 @@ public class SaleService : ISaleService
     /// <summary>
     /// Cancela uma venda inteira.
     /// </summary>
-    public async Task CancelSaleAsync(Guid saleId, bool isActive, CancellationToken cancellationToken)
+    public async Task CancelSaleAsync(Guid saleId, bool isCancelled, CancellationToken cancellationToken)
     {
         var sale = await _saleRepository.GetByIdAsync(saleId, cancellationToken);
         if (sale == null) throw new Exception("Venda não encontrada.");
 
-        sale.IsCancelled = isActive;
+        sale.IsCancelled = isCancelled;
 
         foreach (var item in sale.Items)
         {
-            item.IsCancelled = isActive;
+            item.IsCancelled = isCancelled;
             await _mediator.Publish(new SaleItemCancelledEvent(item.Id), cancellationToken);
         }
 

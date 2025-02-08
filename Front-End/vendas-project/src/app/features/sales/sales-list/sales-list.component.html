@@ -21,10 +21,10 @@
             <td mat-cell *matCellDef="let sale">{{ sale.totalValue | currency: 'BRL' }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="isActive">
+        <ng-container matColumnDef="isCancelled">
             <th mat-header-cell *matHeaderCellDef>Ativo</th>
             <td mat-cell *matCellDef="let sale">
-                <mat-slide-toggle (change)="toggleStatus(sale)" [checked]="sale.isActive"
+                <mat-slide-toggle (change)="toggleStatus(sale)" [checked]="sale.isCancelled"
                     color="primary"></mat-slide-toggle>
             </td>
         </ng-container>

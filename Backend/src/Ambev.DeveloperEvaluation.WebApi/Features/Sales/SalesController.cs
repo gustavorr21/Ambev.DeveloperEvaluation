@@ -160,12 +160,12 @@ public class SalesController : BaseController
     /// <param name="saleId">The sale ID</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A confirmation message</returns>
-    [HttpPut("{saleId}/cancel/{isActive}")]
+    [HttpPut("{saleId}/cancel/{isCancelled}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CancelSale(Guid saleId, bool isActive, CancellationToken cancellationToken)
+    public async Task<IActionResult> CancelSale(Guid saleId, bool isCancelled, CancellationToken cancellationToken)
     {
-        var command = new CancelSaleCommand(saleId, isActive);
+        var command = new CancelSaleCommand(saleId, isCancelled);
         await _mediator.Send(command, cancellationToken);
 
         return Ok(new ApiResponse
