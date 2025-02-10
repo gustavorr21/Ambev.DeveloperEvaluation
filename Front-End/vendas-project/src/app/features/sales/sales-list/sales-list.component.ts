@@ -97,9 +97,7 @@ export class SalesListComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.salesService.deleteSale(saleId).subscribe(() => {
-          this.loadSales();
-        });
+        this.deleteSale(saleId);
       }
     });
   }

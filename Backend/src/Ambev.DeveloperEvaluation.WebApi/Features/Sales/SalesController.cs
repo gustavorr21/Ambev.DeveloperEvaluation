@@ -109,13 +109,6 @@ public class SalesController : BaseController
 
         var response = await _mediator.Send(command, cancellationToken);
 
-        if (response == null || !response.Any())
-            return NotFound(new ApiResponse
-            {
-                Success = false,
-                Message = "No sales found"
-            });
-
         return Ok(new ApiResponseWithData<IEnumerable<GetSaleResponse>>
         {
             Success = true,
